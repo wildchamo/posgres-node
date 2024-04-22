@@ -1,6 +1,15 @@
 const express = require("express");
 
 const UserService = require("../services/user.service");
+
+const { validatorHandler } = require("../middlewares/validator.handle");
+
+const {
+  createUsersSchema,
+  updateUsersSchema,
+  geUsersSchema
+} = require("../schemas/user.schema");
+
 const router = express.Router();
 
 const service = new UserService();
@@ -14,18 +23,27 @@ router.get("/", async (req, res, next) => {
   }
 });
 
-// router.get('/', (req, res) => {
-//   const { limit, offset } = req.query;
-//   if (limit && offset) {
-//     res.json({ limit, offset });
-//   } else {
-//     res.send('todo los datos papa lindo');
-//   }
-// });
+router.get(
+  "/:id",
+  validatorHandler(geUsersSchema, "params"),
+  async (req, res) => {
+    const {id}= req.params;
+    const newUser = await service.findOne(id);
+    res.json(newUser);
+  }
+);
 
-router.get("/:id", (req, res) => {
-  const { id } = req.params;
-  res.json({ id, username: "Luis" });
-});
+router.post(
+  "/",
+  validatorHandler(createUsersSchema, "body"),
+  async (req, res) => {
+    const body = req.body;
+    const newUser = await service.create(body);
+    res.status(201).json({
+      message: "created",
+      data: newUser
+    });
+  }
+);
 
 module.exports = router;

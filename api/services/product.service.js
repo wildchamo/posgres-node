@@ -2,9 +2,11 @@ const { faker } = require("@faker-js/faker");
 
 const boom = require("@hapi/boom");
 
-const Joi = require("joi");
 
+const sequelize = require("../libs/sequelize");
 const pool = require("../libs/postgresPool");
+
+const { models } = require("../libs/sequelize");
 
 class ProductsService {
   constructor() {
@@ -41,9 +43,8 @@ class ProductsService {
   }
 
   async find() {
-    const query = "SELECT * FROM tasks";
-    const data = await this.pool.query(query);
-    return data.rows;
+    const rta = await models.Users.findAll();
+    return { rta };
   }
 
   async findOne(id) {
