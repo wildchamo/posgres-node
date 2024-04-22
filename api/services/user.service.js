@@ -18,7 +18,7 @@ class UserService {
   }
   async find() {
     const rta = await models.User.findAll();
-    return { rta };
+    return rta;
   }
 
   async findOne(id) {
@@ -33,13 +33,13 @@ class UserService {
     const user = this.findOne(id);
 
     const rta = user.update(productUpdate);
-    return { rta };
+    return rta;
   }
 
   async delete(id) {
     const user = await this.findOne(id);
     await user.destroy();
-    return { id };
+    return id;
   }
 }
 
