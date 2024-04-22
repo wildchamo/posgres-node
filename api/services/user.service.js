@@ -1,7 +1,5 @@
 const boom = require("@hapi/boom");
 
-const Joi = require("joi");
-
 const pool = require("../libs/postgresPool");
 
 const { models } = require("../libs/sequelize");
@@ -12,13 +10,12 @@ class UserService {
     this.pool.on("error", (err) => {
       console.error(err);
     });
-  } 
-
-  async create({ name, email, password }) {
-    const rta = await models.User.create({ name, email, password });
-    return { rta };
   }
-
+  async create({ name, email, password }) {
+    const newUser = await models.User.create({ name, email, password });
+    const { password: pwd, ...userWithoutPassword } = newUser.dataValues;
+    return { user: userWithoutPassword };
+  }
   async find() {
     const rta = await models.User.findAll();
     return { rta };
@@ -26,13 +23,24 @@ class UserService {
 
   async findOne(id) {
     const rta = await models.User.findByPk(id);
-    return { rta };
-
+    if (!rta) {
+      throw boom.notFound("User not found");
+    }
+    return rta;
   }
 
-  async update(id, productUpdate) {}
+  async update(id, productUpdate) {
+    const user = this.findOne(id);
 
-  async delete(id) {}
+    const rta = user.update(productUpdate);
+    return { rta };
+  }
+
+  async delete(id) {
+    const user = await this.findOne(id);
+    await user.destroy();
+    return { id };
+  }
 }
 
 module.exports = UserService;
