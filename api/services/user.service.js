@@ -11,8 +11,8 @@ class UserService {
       console.error(err);
     });
   }
-  async create({ name, email, password }) {
-    const newUser = await models.User.create({ name, email, password });
+  async create({ name, email, password, role }) {
+    const newUser = await models.User.create({ name, email, password, role });
     const { password: pwd, ...userWithoutPassword } = newUser.dataValues;
     return { user: userWithoutPassword };
   }
@@ -25,14 +25,14 @@ class UserService {
     const rta = await models.User.findByPk(id);
     if (!rta) {
       throw boom.notFound("User not found");
-    }
+    } 
     return rta;
   }
 
-  async update(id, productUpdate) {
+  async update(id, userUpdate) {
     const user = this.findOne(id);
 
-    const rta = user.update(productUpdate);
+    const rta = user.update(userUpdate);
     return rta;
   }
 

@@ -220,3 +220,4 @@ $RECYCLE.BIN/
 .vercel
 node_modules/
 postgres_data
+mysql_data
