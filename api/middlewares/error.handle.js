@@ -1,26 +1,24 @@
-const { ValidationError } = require("sequelize");
-const boom = require("@hapi/boom");
+const { ValidationError } = require('sequelize');
+const boom = require('@hapi/boom');
 
-function logErrors(error, req, res, next) {
-  console.log("logErrors");
-  console.error(error);
-  next(error);
+function logErrors (err, req, res, next) {
+  console.error(err);
+  next(err);
 }
 
-function boomErrorHandler(error, req, res, next) {
-  if (error.isBoom) {
-    const { output } = error;
-    res.status(output.statusCode).json(output.payload);
-  } else {
-    next(error);
-  }
-}
-
-function errorHandler(error, req, res, next) {
+function errorHandler(err, req, res, next) {
   res.status(500).json({
-    message: error.message,
-    stack: error.stack
+    message: err.message,
+    stack: err.stack,
   });
+}
+
+function boomErrorHandler(err, req, res, next) {
+  if (err.isBoom) {
+    const { output } = err;
+    res.status(output.statusCode).json(output.payload);
+  }
+  next(err);
 }
 
 function ormErrorHandler(err, req, res, next) {
@@ -34,4 +32,5 @@ function ormErrorHandler(err, req, res, next) {
   next(err);
 }
 
-module.exports = { logErrors, errorHandler, boomErrorHandler, ormErrorHandler };
+
+module.exports = { logErrors, errorHandler, boomErrorHandler, ormErrorHandler }
