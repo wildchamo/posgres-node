@@ -17,7 +17,7 @@ class UserService {
     return { user: userWithoutPassword };
   }
   async find() {
-    const rta = await models.User.findAll();
+    const rta = await models.User.findAll({ include: ["customer"] });
     return rta;
   }
 
@@ -25,7 +25,7 @@ class UserService {
     const rta = await models.User.findByPk(id);
     if (!rta) {
       throw boom.notFound("User not found");
-    } 
+    }
     return rta;
   }
 

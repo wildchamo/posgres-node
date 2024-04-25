@@ -30,13 +30,13 @@ const UserSchema = {
   },
   role: {
     allowNull: false,
-    type: DataTypes.STRING,
+    type: DataTypes.STRING
   }
 };
 
 class User extends Model {
-  static associate() {
-    //
+  static associate(models) {
+    this.hasOne(models.Customer, { as: "customer", foreignKey: "user_id" });
   }
 
   static config(sequelize) {
