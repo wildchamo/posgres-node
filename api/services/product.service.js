@@ -1,59 +1,37 @@
-const { faker } = require("@faker-js/faker");
-
 const boom = require("@hapi/boom");
-
-
-const sequelize = require("../libs/sequelize");
-const pool = require("../libs/postgresPool");
 
 const { models } = require("../libs/sequelize");
 
 class ProductsService {
-  constructor() {
-    this.products = [];
-    this.generate();
-    this.pool = pool;
-    this.pool.on("error", (err) => {
-      console.error(err);
-    });
-  }
+  constructor() {}
 
-  generate() {
-    const limit = 10;
-    for (let i = 0; i < limit; i++) {
-      this.products.push({
-        id: i + 1,
-        name: faker.commerce.productName().toString(),
-        price: parseInt(faker.commerce.price(), 10),
-        image: faker.image.url(),
-        isBlock: faker.datatype.boolean()
+  async create({ name, price, image, description, categoryId }) {
+    const category = await models.Category.findByPk(categoryId);
+    if (!category) {
+      throw boom.notFound("category not found");
+    } else {
+      const newProduct = await models.Product.create({
+        name,
+        price,
+        image,
+        description,
+        categoryId
       });
+      return newProduct;
     }
   }
 
-  async create({ name, price, image }) {
-    const newProduct = {
-      id: this.products.length + 1,
-      name,
-      price,
-      image
-    };
-    this.products.push(newProduct);
-    return newProduct;
-  }
-
   async find() {
-    const rta = await models.Users.findAll();
+    const rta = await models.Product.findAll({
+      include: ["category"]
+    });
     return { rta };
   }
 
   async findOne(id) {
-    const product = this.products.find((item) => item.id == id);
+    const product = await models.Product.findByPk(id);
     if (!product) {
       throw boom.notFound("Product not found");
-    }
-    if (product.isBlock) {
-      throw boom.conflict("Product not allowed to see");
     } else {
       return product;
     }
