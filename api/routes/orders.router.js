@@ -12,7 +12,7 @@ const {
 
 const router = express.Router();
 
-const service = new OrdersService(); 
+const service = new OrdersService();
 
 router.get("/", async (req, res, next) => {
   try {
@@ -35,7 +35,9 @@ router.get(
   }
 );
 
-router.post("/", validatorHandler(createOrderSchema, "body"), (req, res) => {
+router.post(
+  "/",
+  validatorHandler(createOrderSchema, "body"),
   async (req, res, next) => {
     try {
       const body = req.body;
@@ -43,7 +45,7 @@ router.post("/", validatorHandler(createOrderSchema, "body"), (req, res) => {
     } catch (error) {
       next(error);
     }
-  };
-});
+  }
+);
 
 module.exports = router;
