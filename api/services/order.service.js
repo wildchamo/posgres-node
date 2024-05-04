@@ -15,7 +15,14 @@ class OrderService {
   }
 
   async findOne(id) {
-    return id;
+    return await models.Order.findByPk(id, {
+      include: [
+        {
+          association: "customer",
+          include: ["user"]
+        }
+      ]
+    });
   }
 
   async update(id, changes) {}
