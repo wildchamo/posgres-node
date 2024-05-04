@@ -21,10 +21,17 @@ class ProductsService {
     }
   }
 
-  async find() {
-    const rta = await models.Product.findAll({
+  async find({ limit, offset }) {
+    const options = {
       include: ["category"]
-    });
+    };
+
+    if (limit && offset) {
+      options.limit = limit;
+      options.offset = offset;
+      console.log(limit, offset);
+    }
+    const rta = await models.Product.findAll(options);
     return { rta };
   }
 

@@ -1,37 +1,42 @@
-const express = require('express');
-const ProductsService = require('../services/product.service');
-const { validatorHandler } = require('../middlewares/validator.handle');
+const express = require("express");
+const ProductsService = require("../services/product.service");
+const { validatorHandler } = require("../middlewares/validator.handle");
 const {
   createProductsSchema,
   updateProductsSchema,
   getProductSchema,
-} = require('../schemas/product.schema');
+  queryProductSchema
+} = require("../schemas/product.schema");
 
 const router = express.Router();
 
 const service = new ProductsService();
 
-router.get('/', async (req, res) => {
-  const products = await service.find();
-  res.json(products);
-});
+router.get(
+  "/", 
+  validatorHandler(queryProductSchema, "query"),
+  async (req, res) => {
+    const products = await service.find(req.query);
+    res.json(products);
+  }
+);
 
 router.post(
-  '/',
-  validatorHandler(createProductsSchema, 'body'),
+  "/",
+  validatorHandler(createProductsSchema, "body"),
   async (req, res) => {
     const body = req.body;
     const newProduct = await service.create(body);
     res.status(201).json({
-      message: 'created',
-      data: newProduct,
+      message: "created",
+      data: newProduct
     });
-  },
+  }
 );
 
 router.get(
-  '/:id',
-  validatorHandler(getProductSchema, 'params'),
+  "/:id",
+  validatorHandler(getProductSchema, "params"),
 
   async (req, res, next) => {
     try {
@@ -43,35 +48,35 @@ router.get(
     } catch (error) {
       next(error);
     }
-  },
+  }
 );
 
 router.patch(
-  '/:id',
-  validatorHandler(updateProductsSchema, 'params'),
-  validatorHandler(updateProductsSchema, 'body'),
+  "/:id",
+  validatorHandler(updateProductsSchema, "params"),
+  validatorHandler(updateProductsSchema, "body"),
   async (req, res, next) => {
     try {
       const { id } = req.params;
       const body = req.body;
       const product = await service.update(id, body);
       res.json({
-        message: 'update ',
-        data: product,
+        message: "update ",
+        data: product
       });
     } catch (error) {
       next(error);
     }
-  },
+  }
 );
 
-router.delete('/:id', async (req, res) => {
+router.delete("/:id", async (req, res) => {
   const { id } = req.params;
   const product = await service.delete(id);
 
   res.json({
-    message: 'borrauw ',
-    data: product,
+    message: "borrauw ",
+    data: product
   });
 });
 
