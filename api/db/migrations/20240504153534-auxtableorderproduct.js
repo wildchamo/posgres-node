@@ -1,14 +1,14 @@
 "use strict";
 
 const {
-  orderProductSchema,
+  OrderProductSchema,
   ORDER_PRODUCT_TABLE
 } = require("../models/order-product.model");
 
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface) {
-    await queryInterface.createTable(ORDER_PRODUCT_TABLE, orderProductSchema);
+    await queryInterface.createTable(ORDER_PRODUCT_TABLE, OrderProductSchema);
   },
 
   async down(queryInterface) {

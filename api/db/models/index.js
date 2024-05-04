@@ -3,12 +3,16 @@ const { CustomerSchema, Customer } = require("./customer.model");
 const { CategorySchema, Category } = require("./category.model");
 const { ProductSchema, Product } = require("./product.model");
 const { OrderSchema, Order } = require("./order.model");
+const { OrderProductSchema, OrderProduct } = require("./order-product.model"); 
 
 function setUpModels(sequelize) {
   User.init(UserSchema, User.config(sequelize));
   Customer.init(CustomerSchema, Customer.config(sequelize));
   Category.init(CategorySchema, Category.config(sequelize));
   Product.init(ProductSchema, Product.config(sequelize));
+
+  OrderProduct.init(OrderProductSchema, OrderProduct.config(sequelize));
+  
   Order.init(OrderSchema, Order.config(sequelize));
 
   User.associate(sequelize.models);

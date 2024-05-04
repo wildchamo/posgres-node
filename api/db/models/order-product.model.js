@@ -25,7 +25,7 @@ const OrderProductSchema = {
     onDelete: "SET NULL"
   },
   productId: {
-    field: "product",
+    field: "product_id",
     allowNull: false,
     type: DataTypes.INTEGER,
     references: {
@@ -39,22 +39,22 @@ const OrderProductSchema = {
 
 class OrderProduct extends Model {
   static associate(models) {
-    this.belongsTo(models.Order, { as: "order", foreignKey: "orderId" });
-    this.belongsTo(models.Product, { as: "product", foreignKey: "productId" });
+    // this.belongsTo(models.Order, { as: "order", foreignKey: "orderId" });
+    // this.belongsTo(models.Product, { as: "product", foreignKey: "productId" });
   }
 
   static config(sequelize) {
     return {
       sequelize,
       tableName: ORDER_PRODUCT_TABLE,
-      modelName: "OrdersProducts",
+      modelName: "OrderProduct",
       timestamps: false
     };
   }
 }
 
 module.exports = {
-  ORDER_PRODUCT_TABLE: ORDER_PRODUCT_TABLE,
-  OrderProductSchema: OrderProductSchema,
+  ORDER_PRODUCT_TABLE,
+  OrderProductSchema,
   OrderProduct
 };
