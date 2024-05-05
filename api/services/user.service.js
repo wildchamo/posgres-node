@@ -2,6 +2,8 @@ const boom = require("@hapi/boom");
 
 const pool = require("../libs/postgresPool");
 
+const { encryptPassword } = require("../utils/encrypt");
+
 const { models } = require("../libs/sequelize");
 
 class UserService {
@@ -12,7 +14,13 @@ class UserService {
     });
   }
   async create({ name, email, password, role }) {
-    const newUser = await models.User.create({ name, email, password, role });
+    const encryptedPassword = await encryptPassword(password);
+    const newUser = await models.User.create({
+      name,
+      email,
+      password: encryptedPassword,
+      role
+    });
     const { password: pwd, ...userWithoutPassword } = newUser.dataValues;
     return { user: userWithoutPassword };
   }

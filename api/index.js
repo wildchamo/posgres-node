@@ -13,9 +13,6 @@ const app = express();
 app.use(express.json());
 routerApi(app);
 app.get("/", (req, res) => res.send("Express on Vercel Jose"));
-app.get("/hola", checkAPIkey, (req, res) =>
-  res.send("Ruta protegida 😈")
-);
 
 app.use(logErrors);
 app.use(boomErrorHandler);

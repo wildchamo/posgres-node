@@ -1,5 +1,7 @@
 const boom = require("@hapi/boom");
 const { models } = require("../libs/sequelize");
+const { encryptPassword } = require("../utils/encrypt");
+
 class CustomerService {
   constructor() {}
   async find() {
@@ -8,7 +10,7 @@ class CustomerService {
   }
 
   async findOne(id) {
-    const customer = await models.Customer.findByPk(id, {include: ["user"]});
+    const customer = await models.Customer.findByPk(id, { include: ["user"] });
     if (!customer) {
       throw boom.notFound("customer not found");
     }
@@ -16,7 +18,12 @@ class CustomerService {
   }
 
   async create(data) {
-    const newCustomer = await models.Customer.create(data, {
+    const encryptedPassword = await encryptPassword(data.user.password, 10);
+    const newData = {
+      ...data,
+      user: { ...data.user, password: encryptedPassword }
+    };
+    const newCustomer = await models.Customer.create(newData, {
       include: ["user"]
     });
     return newCustomer;
