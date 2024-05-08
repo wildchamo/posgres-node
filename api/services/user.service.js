@@ -36,6 +36,16 @@ class UserService {
     }
     return rta;
   }
+    async findByEmail(email) {
+    const rta = await models.User.findOne({
+      where: { email },
+    });
+    
+    if (!rta) {
+      throw boom.notFound("User not found");
+    }
+    return rta;
+  }
 
   async update(id, userUpdate) {
     const user = this.findOne(id);

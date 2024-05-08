@@ -11,7 +11,13 @@ const {
 const app = express();
 
 app.use(express.json());
+
+
+
 routerApi(app);
+
+require('./utils/auth/index.js')
+
 app.get("/", (req, res) => res.send("Express on Vercel Jose"));
 
 app.use(logErrors);
