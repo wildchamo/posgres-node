@@ -7,7 +7,7 @@ const { verifyHash } = require("../../encrypt");
 const service = new UserService();
 const LocalStrategy = new Strategy(
   {
-    usernameField: "email",
+    usernameField: "email"
   },
   async (email, password, done) => {
     try {
@@ -19,6 +19,7 @@ const LocalStrategy = new Strategy(
       if (!isMatch) {
         done(boom.unauthorized("Password doesn't match"), false);
       }
+      delete user.dataValues.password;
       done(null, user);
     } catch (error) {
       done(error, false);
