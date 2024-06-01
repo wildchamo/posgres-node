@@ -4,8 +4,8 @@ const transporter = nodemailer.createTransport({
   host: "smtp.gmail.com",
   port: 465,
   auth: {
-    user: "wildchamo@gmail.com",
-    pass: "xvpaheugybizdrmx"
+    user: "",
+    pass: ""
   }
 });
 
@@ -14,7 +14,7 @@ async function main() {
   // send mail with defined transport object
   const info = await transporter.sendMail({
     from: '"Maddison Foo Koch 👻" <afton.runte57@gmail.com>', // sender address
-    to: "wildchamo@gmail.com", // list of receivers
+    to: "", // list of receivers
     subject: "JOSE LUIS", // Subject line
     text: "Hello world?", // plain text body
     html: "<b>Hello world?</b>" // html body
