@@ -36,11 +36,11 @@ class UserService {
     }
     return rta;
   }
-    async findByEmail(email) {
+  async findByEmail(email) {
     const rta = await models.User.findOne({
-      where: { email },
+      where: { email }
     });
-    
+
     if (!rta) {
       throw boom.notFound("User not found");
     }
@@ -48,9 +48,8 @@ class UserService {
   }
 
   async update(id, userUpdate) {
-    const user = this.findOne(id);
-
-    const rta = user.update(userUpdate);
+    const user = await this.findOne(id);
+    const rta = await user.update(userUpdate);
     return rta;
   }
 

@@ -9,4 +9,23 @@ function checkAPIkey(req, res, next) {
   }
 }
 
-module.exports = checkAPIkey;
+function checkAdminRole(req, res, next) {
+  const { role } = req.user;
+  if (role === "admin") {
+    next();
+  } else {
+    next(boom.unauthorized());
+  }
+}
+
+function checkRoles(...roles) {
+  return (req, res, next) => {
+    const { role } = req.user;
+    if (roles.includes(role)) {
+      next();
+    } else {
+      next(boom.unauthorized());
+    }
+  };
+}
+module.exports = { checkAPIkey, checkAdminRole,checkRoles };
